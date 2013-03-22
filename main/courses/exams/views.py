@@ -640,6 +640,7 @@ def save_exam_ajax(request, course_prefix, course_suffix, create_or_edit="create
     xmlImported = request.POST.get('xmlImported','')
     quizdown = request.POST.get('quizdown','')
     due_date = request.POST.get('due_date', '')
+    minutesallowed = request.POST.get('minutesallowed', '')
     grace_period = request.POST.get('grace_period', '')
     partial_credit_deadline =  request.POST.get('partial_credit_deadline', '')
     late_penalty = request.POST.get('late_penalty', '')
@@ -659,6 +660,8 @@ def save_exam_ajax(request, course_prefix, course_suffix, create_or_edit="create
         hide_grades = True
     else:
         hide_grades = False
+    if not minutesallowed: 
+        minutesallowed = None
 
     #########Validation, lots of validation#######
     if not slug:
@@ -773,7 +776,7 @@ def save_exam_ajax(request, course_prefix, course_suffix, create_or_edit="create
                         due_date=dd, assessment_type=assessment_type, mode="draft", total_score=total_score, grade_single=grade_single,
                         grace_period=gp, partial_credit_deadline=pcd, late_penalty=lp, submissions_permitted=sp, resubmission_penalty=rp,
                         exam_type=exam_type, autograde=autograde, display_single=display_single, invideo=invideo, section=contentsection,
-                        xml_imported=xmlImported, quizdown=quizdown, hide_grades=hide_grades
+                        xml_imported=xmlImported, quizdown=quizdown, hide_grades=hide_grades, minutesallowed=minutesallowed
                         )
 
         exam_obj.save()

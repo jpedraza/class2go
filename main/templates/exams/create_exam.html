@@ -148,6 +148,10 @@
             <input id="grace_period" class="picker"  type="text" name="grace_period" value="" data-datetimepicker>
             <label class="control-label" for="hard_deadline">{% trans 'Hard Deadline' %}:*</label>
             <input id="hard_deadline" class="picker"  type="text" name="hard_deadline" value="" data-datetimepicker>
+		</div>
+        <div class="atomic-unit well">
+            <label class="control-label" for="minutes-allowed">{% trans 'Minutes Allowed' %}:</label>
+            <input id="minutes-allowed" name="minutes-allowed" type="number"></input>
         </div>
         <div class="atomic-unit well" id="penalties" >
             <label class="control-label" for="late_penalty">{% trans 'Late Penalty' %}:*</label>
@@ -691,6 +695,7 @@ age: 20,
                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                data: { title:$('input#exam_title').val(),
                        slug:saved_slug,
+                       minutesallowed:$('input#minutes-allowed').val(),
                        due_date:$('input#due_date').val(),
                        grace_period:$('input#grace_period').val(),
                        partial_credit_deadline:$('input#hard_deadline').val(),
