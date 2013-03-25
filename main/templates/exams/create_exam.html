@@ -148,11 +148,9 @@
             <input id="grace_period" class="picker"  type="text" name="grace_period" value="" data-datetimepicker>
             <label class="control-label" for="hard_deadline">{% trans 'Hard Deadline' %}:*</label>
             <input id="hard_deadline" class="picker"  type="text" name="hard_deadline" value="" data-datetimepicker>
+	        <label class="control-label" for="minutes-allowed">{% trans 'Minutes Allowed' %}:</label>
+	        <input id="minutes-allowed" name="minutes-allowed" type="number"></input>
 		</div>
-        <div class="atomic-unit well">
-            <label class="control-label" for="minutes-allowed">{% trans 'Minutes Allowed' %}:</label>
-            <input id="minutes-allowed" name="minutes-allowed" type="number"></input>
-        </div>
         <div class="atomic-unit well" id="penalties" >
             <label class="control-label" for="late_penalty">{% trans 'Late Penalty' %}:*</label>
             <input id="late_penalty" name="late_penalty" type="text" value="0"/>
