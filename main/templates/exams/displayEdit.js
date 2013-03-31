@@ -16,7 +16,9 @@ window.displayEditQuestion = function(questionMD){
     container.innerHTML = editor.getValue();
     var assocHTML = $(container).find('#' + assocQID)[0]; 
     var questionText = $($(assocHTML).find('div.question_text')[0]).find('p'); 
-    if(questionText.length > 0)
+    var mDOM=$.parseXML(metadata_editor.getValue());
+    var assocXML = $(mDOM).find('#' + assocQID)[0];
+    if(questionText.length > 0 && assocXML)
     {
         $('div.question#' + assocQID ).append($(toggleExplBtn));        
     }

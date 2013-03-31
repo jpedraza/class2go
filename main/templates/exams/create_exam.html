@@ -199,6 +199,7 @@
 					        <input type="button" id="checkboxes-btn" class="btn" value="{% trans 'New Checkboxes Question' %}" title="{% trans 'New Checkboxes Question' %}" />
 							<input type="button" id="numerical-btn" class="btn" value="{% trans 'New Numerical Tolerance Question' %}" title="{% trans 'New Numerical Tolerance Question' %}" />
 							<input type="button" id="regex-btn" class="btn" value="{% trans 'New Regex Question' %}" title="{% trans 'New Regex Question' %}" />
+							<input type="button" id="grid-btn" class="btn" value="{% trans 'New Grid Question' %}" title="{% trans 'New Grid Question' %}" />
 					    </div>
 					</div>
                     <div id="staging-area"></div>
@@ -455,6 +456,39 @@ Testing your common sense: 15.6 sec
 			            </div>
 			        </solution>
 			</question_metadata>
+        </textarea>
+	</form>
+</div>
+
+<div id="grid-question-form" title="{% trans 'Grid Question' %}">
+	<form>
+		<label for="grid-question-question-text" id="grid-question-label-question-text">{% trans 'Enter the text for this grid question' %}</label>
+		<textarea name="grid-question-question-text" id="grid-question-question-text" class="text ui-widget-content ui-corner-all" placeholder="Replace this with the text of your grid question."></textarea>
+		<p><b>{% trans 'Column Headings' %}</b></p>
+		<label for="grid-question-column1" id="grid-question-column-label1">{% trans 'Column #1 Title' %} <input type="text" name="grid-question-column1" id="grid-question-column1" class="text ui-widget-content ui-corner-all" placeholder="Not Important"></input></label>
+		<label for="grid-question-column2" id="grid-question-column-label2">{% trans 'Column #2 Title' %} <input type="text" name="grid-question-column2" id="grid-question-column2" class="text ui-widget-content ui-corner-all" placeholder="Somewhat Important"></input></label>
+		<label for="grid-question-column3" id="grid-question-column-label3">{% trans 'Column #3 Title' %} <input type="text" name="grid-question-column3" id="grid-question-column3" class="text ui-widget-content ui-corner-all"  placeholder="Very Important"></input></label>
+		<label for="grid-question-column4" id="grid-question-column-label4">{% trans 'Column #4 Title' %} <input type="text" name="grid-question-column4" id="grid-question-column4" class="text ui-widget-content ui-corner-all"  placeholder="Extremely Important"></input></label>
+		<p><b>{% trans 'Row Questions' %}</b></p>
+		<p> {% trans 'Question #1' %} </p>
+		<textarea name="grid-question-subquestion1" id="grid-question-subquestion1" class="text ui-widget-content ui-corner-all" placeholder="This subject is relevant to my academic field of study."></textarea>
+		<p> {% trans 'Question #2' %} </p>
+		<textarea name="grid-question-subquestion2" id="grid-question-subquestion2" class="text ui-widget-content ui-corner-all" placeholder="This class teaches skills that will help with my current job."></textarea>
+		<p> {% trans 'Question #3' %} </p>
+		<textarea name="grid-question-subquestion3" id="grid-question-subquestion3" class="text ui-widget-content ui-corner-all" placeholder="I am personally interested in the subject matter."></textarea>
+		<p> {% trans 'Question #4' %} </p>
+		<textarea name="grid-question-subquestion4" id="grid-question-subquestion4" class="text ui-widget-content ui-corner-all" placeholder="I am seeking fun and challenge."></textarea>
+		<p> {% trans 'Question #5' %} </p>
+		<textarea name="grid-question-subquestion5" id="grid-question-subquestion5" class="text ui-widget-content ui-corner-all" placeholder="I want to explore this subject area for possible career change."></textarea>
+		<p> {% trans 'Question #6' %} </p>
+		<textarea name="grid-question-subquestion6" id="grid-question-subquestion6" class="text ui-widget-content ui-corner-all" placeholder="I want a refresher or different perspective on a subject I am familiar with."></textarea>
+		<input name="grid-question-edit" id="grid-question-edit" class="text ui-widget-content ui-corner-all hidden"></input>		
+		<textarea name="grid-question-html" id="grid-question-html" hidden="true" class="text ui-widget-content ui-corner-all hidden">
+			<div class="question" id="problem_1" data-report="">
+		    	<h3 class="questionNumber"></h3>
+				<div class="question_text"></div>
+		    	<table class="table table-striped"></table>
+			</div>
         </textarea>
 	</form>
 </div>
@@ -791,7 +825,35 @@ age: 20,
                         }
                   }],
     });
-				    
+
+  $( "#grid-question-form" ).dialog({
+        autoOpen: false,
+        height: 1000,
+        width: "90%",
+        modal: true,
+        close: function() {
+            if (!__xml_saved_single_choice)  $('#xml-entry').val(__saved_import_single_choice_xml);
+            __xml_saved_single_choice=false;
+        },
+        buttons: [{
+                    text:"{% trans 'Add Question' %}",
+                    id:"add-grid-question-button",
+                    click: function() {
+                        __xml_saved_single_choice=true;
+						var shouldClose = c2gXMLParse.addGridQuestion($('#grid-question-html').val()); 
+						if(shouldClose) {
+	                        $( this ).dialog( "close" );							
+						}
+                        }
+                  },
+                  {
+                    text:"{% trans 'Cancel' %}",
+                    click: function() {
+                        $( this ).dialog( "close" );
+                        }
+                  }],
+    });
+ 
     $( "#single-choice-form" ).dialog({
         autoOpen: false,
         height: 800,
@@ -934,6 +996,16 @@ age: 20,
 		$( "#regex-response-form" ).dialog( "open" ); 
 	})
 	
+	$('#grid-btn').click(function() {
+		c2gXMLParse.clearInputs('#grid-question-form'); 
+		if(c2gXMLParse.gridQuestionPossible())
+		{
+			$( "#grid-question-form" ).dialog( "open" ); 			
+		} else {
+			alert("{% trans 'Grid questions can only be added to surveys at this time!'%}"); 
+		}
+	})
+	
     $("#import-xml-button").before("<span class='warning' id='clobber-warning'>{% trans 'Warning! Importing this XML overwrites the HTML and XML Metadata in the editors below.' %}</span>");
 
     $("#clobber-warning").hide();
@@ -959,6 +1031,7 @@ age: 20,
     {% include "exams/displayDelete.js" %}
     {% include "exams/displayMove.js" %}
     {% include "exams/renderPreview.js" %}
+    {% include "exams/addGridQuestion.js" %}
     {% include "exams/quizdown.js" %}
     
 

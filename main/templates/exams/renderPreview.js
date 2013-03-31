@@ -60,19 +60,43 @@ var c2gXMLParse = (function() {
                     if(mDOM[i].tagName == "DIV") {
                         $(mDOM[i]).attr('id', 'question_' + v);
                         $(mDOM[i]).attr('number', v);
-                        fieldset = $(mDOM[i]).find('fieldset'); 
+                        var fieldset = $(mDOM[i]).find('fieldset'); 
+                        var fieldset = $(mDOM[i]).find('fieldset'); 
                         var inputs = $(mDOM[i]).find('input'); 
-                        if(inputs)
+                        var table = $(mDOM[i]).find('table'); 
+                        if(table.length > 0)
                         {
-                            for(var m = 0; m < inputs.length; m++)
+                            //Grid questions have a different naming scheme! 
+                            table = table[0]; 
+                            trs = $(table).find('tr'); 
+                            for(var t = 0; t < trs.length; t++)
                             {
-                                if(fieldset.length > 0) {
-                                    $(inputs[m]).attr('name', 'question_' + v);                                     
-                                } else {
-                                    $(inputs[m]).attr('name', 'question_' + v + '_name' + m);  
+                                var tr_name = 'question' + v + '_subquestion' + t; 
+                                $(trs[t]).attr('name', tr_name); 
+                                $(trs[t]).attr('id', tr_name);                                 
+                                var labels = $(trs[t]).find('label'); 
+                                for(var l = 0; l < labels.length; l++)
+                                {
+                                    var label_for = 'question' + v + '_subquestion' + t + '_choice' + l; 
+                                    var input = $(labels[l]).find('input')[0]; 
+                                    input.setAttribute('id', label_for); 
+                                    input.setAttribute('name', tr_name); 
+                                    $(labels[l]).attr('for', label_for); 
                                 }
-                                $(inputs[m]).attr('id', 'question_' + v + '_name' + m); 
-                            } 
+                            }
+                        } else {
+                            if(inputs)
+                            {
+                                for(var m = 0; m < inputs.length; m++)
+                                {
+                                    if(fieldset.length > 0) {
+                                        $(inputs[m]).attr('name', 'question_' + v);                                     
+                                    } else {
+                                        $(inputs[m]).attr('name', 'question_' + v + '_name' + m);  
+                                    }
+                                    $(inputs[m]).attr('id', 'question_' + v + '_name' + m); 
+                                } 
+                            }
                         }
 
                         v = v+1; 
