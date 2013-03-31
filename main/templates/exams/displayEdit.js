@@ -4,6 +4,12 @@
 window.displayEditQuestion = function(questionMD){
     //This function takes a DOM object of the metadata and displays the edit button after the
     //question with the corresponding id
+    //disabling edit for all surveys! 
+    var assessment_type = $('#assessment_type').val(); 
+    if(assessment_type == 'survey')
+    {
+        return; 
+    }
     var mySolution = $(questionMD).find('solution');
     var assocQID = $(questionMD).attr('id');
     var toggleExplBtn = document.createElement('input');
@@ -18,6 +24,8 @@ window.displayEditQuestion = function(questionMD){
     var questionText = $($(assocHTML).find('div.question_text')[0]).find('p'); 
     var mDOM=$.parseXML(metadata_editor.getValue());
     var assocXML = $(mDOM).find('#' + assocQID)[0];
+    console.log(assocQID); 
+    console.log(assocXML); 
     if(questionText.length > 0 && assocXML)
     {
         $('div.question#' + assocQID ).append($(toggleExplBtn));        
