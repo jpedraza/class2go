@@ -679,6 +679,92 @@ small.date {
     clear: both;
 }
 
+.right_nav_wrapper #right_nav.calendar_block {
+    padding: 5px;
+    background: #e9e6df;
+}
+.right_nav_wrapper #right_nav.calendar_block table {
+    width: 100%;
+}
+.right_nav_wrapper #right_nav.calendar_block table th {
+    color: #74736f;
+    font-size: 12px;
+    
+}
+.right_nav_wrapper #right_nav.calendar_block table th.month {
+    font-size: 16px;
+    color: #333;
+    padding-bottom: 5px;
+}
+.right_nav_wrapper #right_nav.calendar_block table td {
+    position: relative;
+    border: 1px solid #bdb7a1;
+    background-color: #fcfaf5;
+    height: 45px;
+    width: 14% !important;
+    text-align: right;
+    vertical-align: top;
+    padding: 0;
+    color: #74736f;
+    font-weight: bold;
+    font-size: 12px;
+}
+.right_nav_wrapper #right_nav.calendar_block table td .day_num {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 12px;
+    padding: 3px;
+    line-height: 100%;
+    background-color: #e3dfd5;
+}
+
+.right_nav_wrapper #right_nav.calendar_block table td .day_content {
+    position: absolute;
+    top: 22px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+.right_nav_wrapper #right_nav.calendar_block table td .day_content a {
+    display: inline;
+    font-size: 24px;
+    color: #74736f;
+}
+.right_nav_wrapper #right_nav.calendar_block table td .day_content a {
+    text-decoration: none;
+}
+.right_nav_wrapper #right_nav.calendar_block table td.noday {
+    
+}
+.right_nav_wrapper #right_nav.calendar_block table td.today {
+    background-color: #e9afaf;
+    color: #280b0b;
+}
+.right_nav_wrapper #right_nav.calendar_block table td.today .day_num {
+    background-color: #c83737;
+}
+.right_nav_wrapper #right_nav.calendar_block table td.today .today_border {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    right: -1px;
+    left: -1px;
+    border: 1px solid #820000;
+}
+
+.right_nav_wrapper a.full_calendar {
+    display: block;
+    width: 100%;
+    color: #74736f;
+    font-size: 14px;
+    font-weight: bold;
+    padding-top: 5px;
+    text-align: right;
+}
+
 /* Twitter Feed */
 #twitterWidget {
     position: relative;

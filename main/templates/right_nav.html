@@ -1,5 +1,10 @@
 {% load i18n %}
 
+<div id="right_nav" class="calendar_block well">
+	{{ calendar_block }}
+	<a href="#" class="full_calendar">Full Calendar</a>
+</div>
+
 {% if assignments %}
 	<div id="right_nav" class="upcoming well nav">
 		<h4>{% trans 'Upcoming Due Dates' %}</h4>
@@ -24,5 +29,4 @@
 			{% endfor %}
 		</table>
 	</div>
-
 {% endif %}

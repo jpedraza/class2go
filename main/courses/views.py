@@ -9,15 +9,17 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import cache_page
 
-
 from courses.forms import *
 
 from courses.actions import auth_view_wrapper, is_member_of_course
 
 from c2g.models import CurrentTermMap
 import settings, logging
-from datetime import date
-from datetime import timedelta
+from datetime import date, datetime, timedelta
+
+#calendar imports
+from django.utils.safestring import mark_safe
+from courses.class_calendar.block import ClassCalendar
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +27,7 @@ logger = logging.getLogger(__name__)
 def index(item): # define a index function for list items
  return item[1]
 
-
-curTerm = 'Fall2012'
+curTerm = 'Spring2013'
 
 def current_redirects(request, course_prefix):
     try:
@@ -102,6 +103,7 @@ def main(request, course_prefix, course_suffix):
         
     if (course.calendar_start > date.today()):
         share_block_type = 'join'
+        
 
     return render_to_response('courses/view.html',
         {'common_page_data':       common_page_data,
@@ -113,7 +115,7 @@ def main(request, course_prefix, course_suffix):
         'course_cert':             course_cert,
         'share_block_title':       share_block_title,
         'share_block_type':        share_block_type,
-        'jabber_configured':       jabber_configured,
+        'jabber_configured':       jabber_configured
         },
         context_instance=RequestContext(request))
 
@@ -187,12 +189,25 @@ def leftnav(request, course_prefix, course_suffix):
 @cache_page(60*60, cache="view_store")
 def rightnav(request, course_prefix, course_suffix):
     course = request.common_page_data['ready_course']
+    course_start = course.calendar_start.day
+    course_end = course.calendar_end.day
+    
     exams = get_upcoming_exams(course)
     exams = [exam for exam in exams if not exam.is_child()]
+    
+    #Calendar Block Def
+    now = datetime.now()
+    year, month = now.year, now.month
+    
+    my_assignments = ""
+    #my_assignments = Assignments.objects.order_by('my_date').filter(my_date__year=year, my_date__month=month)
+    calendar_block = ClassCalendar(my_assignments, course_start, course_end).formatmonth(year, month)
+    
     return render_to_response('right_nav.html',
         {
-            'common_page_data':   request.common_page_data,
-            'assignments':        exams, #setting to True to get consistent, ok to show anon users links
+            'common_page_data':        request.common_page_data,
+            'assignments':             exams, #setting to True to get consistent, ok to show anon users links
+            'calendar_block':          mark_safe(calendar_block)
         },
     context_instance=RequestContext(request))
 
@@ -267,4 +282,3 @@ def get_full_contentsection_list(course, filter_children=True):
         if index_list:                           # don't show empty sections
             full_contentsection_list.append(contentsection)
     return full_contentsection_list, full_index_list
-
