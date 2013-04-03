@@ -4,29 +4,3 @@
 	{{ calendar_block }}
 	<a href="#" class="full_calendar">Full Calendar</a>
 </div>
-
-{% if assignments %}
-	<div id="right_nav" class="upcoming well nav">
-		<h4>{% trans 'Upcoming Due Dates' %}</h4>
-		<table class="table table-condensed">
-			<thead>
-				<th>{% trans 'Assignment' %}</th>
-				<th>{% trans 'Due Date' %}</th>
-			</thead>
-  			{% for assignment in assignments %}
-			<tr>
-					<td>
-                        {% if assignment.has_child_exams %}
-                            <a href="{% url assignment.list_view common_page_data.course_prefix common_page_data.course_suffix %}#hashtag_{{assignment.slug}}">
-                        {% else %}
-                            <a href="{% url assignment.show_view common_page_data.course_prefix common_page_data.course_suffix assignment.slug %}">
-                        {% endif %}
-                            <span>{{assignment.title}}</span>
-                            </a>
-                    </td>
-					<td>{{ assignment.due_date|date:"M d" }}, {{ assignment.due_date|date:"f A"|lower}} {{ assignment.due_date|date:"T"}}</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
-{% endif %}

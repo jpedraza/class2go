@@ -119,18 +119,28 @@ def main(request, course_prefix, course_suffix):
         },
         context_instance=RequestContext(request))
 
-def get_upcoming_exams(course):
-  end_date = date.today() + timedelta(weeks=2)
-  exams = Exam.objects.filter(
-    course=course,
-    mode='ready',
-    is_deleted=0,
-    due_date__gte = date.today(),
-    due_date__lte = end_date, 
-    live_datetime__lte = date.today()
-    ).order_by('due_date')
-  return exams
+#def get_upcoming_exams(course):
+#   end_date = date.today() + timedelta(weeks=2)
+#   exams = Exam.objects.filter(
+#       course=course,
+#       mode='ready',
+#       is_deleted=0,
+#       due_date__gte = date.today(),
+#       due_date__lte = end_date, 
+#       live_datetime__lte = date.today()
+#       ).order_by('due_date')
+#   return exams
 
+def get_months_exams(course):
+    month = date.today().month
+    exams = Exam.objects.filter(
+        course=course,
+        mode='ready',
+        is_deleted=0,
+        due_date__month = month,
+        live_datetime__lte = date.today()
+        ).order_by('due_date')
+    return exams
 
 @auth_view_wrapper
 def course_materials(request, course_prefix, course_suffix, section_id=None):
@@ -190,24 +200,30 @@ def leftnav(request, course_prefix, course_suffix):
 @cache_page(60*60, cache="view_store")
 def rightnav(request, course_prefix, course_suffix):
     course = request.common_page_data['ready_course']
-    course_start = course.calendar_start.day
-    course_end = course.calendar_end.day
     
-    exams = get_upcoming_exams(course)
+    exams = get_months_exams(course)
     exams = [exam for exam in exams if not exam.is_child()]
     
     #Calendar Block Def
     now = datetime.now()
     year, month = now.year, now.month
     
-    my_assignments = ""
-    #my_assignments = Assignments.objects.order_by('my_date').filter(my_date__year=year, my_date__month=month)
-    calendar_block = ClassCalendar(my_assignments, course_start, course_end).formatmonth(year, month)
+    if year == course.calendar_start.year and month == course.calendar_start.month:
+        course_start = course.calendar_start.day
+    else:
+        course_start = 0
+    
+    if year == course.calendar_end.year and month == course.calendar_end.month:
+        course_end = course.calendar_end.day
+    else:
+        course_end = 0
+    
+    my_assignments = exams
+    calendar_block = ClassCalendar(my_assignments, course_prefix, course_suffix, course_start, course_end).formatmonth(year, month)
     
     return render_to_response('right_nav.html',
         {
             'common_page_data':        request.common_page_data,
-            'assignments':             exams, #setting to True to get consistent, ok to show anon users links
             'calendar_block':          mark_safe(calendar_block)
         },
     context_instance=RequestContext(request))

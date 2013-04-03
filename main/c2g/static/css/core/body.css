@@ -680,6 +680,7 @@ small.date {
 }
 
 .right_nav_wrapper #right_nav.calendar_block {
+    z-index: 100;
     padding: 5px;
     background: #e9e6df;
 }
@@ -728,13 +729,20 @@ small.date {
     right: 0;
     text-align: center;
 }
-.right_nav_wrapper #right_nav.calendar_block table td .day_content a {
+.right_nav_wrapper #right_nav.calendar_block table td .day_content em {
     display: inline;
     font-size: 24px;
-    color: #74736f;
+    cursor: pointer;
 }
-.right_nav_wrapper #right_nav.calendar_block table td .day_content a {
-    text-decoration: none;
+.right_nav_wrapper #right_nav.calendar_block table td .day_content em ul.day_content_list {
+    display: none;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    z-index: 200;
+}
+.right_nav_wrapper #right_nav.calendar_block table td .day_content em:hover ul.day_content_list {
+    display: block;
 }
 .right_nav_wrapper #right_nav.calendar_block table td.noday {
     
