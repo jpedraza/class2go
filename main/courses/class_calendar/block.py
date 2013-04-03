@@ -1,12 +1,12 @@
 from datetime import date
 from calendar import HTMLCalendar
 from django.utils.html import conditional_escape as esc
-from itertools import groupby
 
 class ClassCalendar(HTMLCalendar):
 
     def __init__(self, assignments, course_prefix, course_suffix, course_start, course_end):
         super(ClassCalendar, self).__init__()
+        print assignments
         self.assignments = self.group_by_day(assignments)
         self.course_prefix = course_prefix
         self.course_suffix = course_suffix
@@ -42,16 +42,21 @@ class ClassCalendar(HTMLCalendar):
         return super(ClassCalendar, self).formatmonth(year, month)
 
     def group_by_day(self, assignments):
-        field = lambda assignment: assignment.due_date.day
-        return dict(
-            [(day, list(items)) for day, items in groupby(assignments, field)]
-        )
+        assignment_dictionary = {}
+        
+        for assignment in assignments:
+            day = assignment.due_date.day
+            if assignment_dictionary.has_key(day):
+                assignment_dictionary[day].append(assignment)
+            else:
+                assignment_dictionary[day] = [assignment]
+        return assignment_dictionary
 
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
     
     def get_assignment_url(self, assignment):
-        if assignment.has_child_exams:
-            return '%s%s%s#hashtag_%s' % (assignment.list_view, self.course_prefix, self.course_suffix, assignment.slug)
-        else:
-            return '%s%s%s%s' % (assignment.list_view, self.course_prefix, self.course_suffix, assignment.slug)
+        #if assignment.has_child():
+        #    return '/%s/%s/%ss#%s' % (self.course_prefix, self.course_suffix, assignment.exam_type,  assignment.slug)
+        #else:
+        return '/%s/%s/%ss/%s' % (self.course_prefix, self.course_suffix, assignment.exam_type,  assignment.slug)

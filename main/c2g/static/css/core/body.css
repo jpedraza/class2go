@@ -737,11 +737,19 @@ small.date {
 .right_nav_wrapper #right_nav.calendar_block table td .day_content em ul.day_content_list {
     display: none;
     position: absolute;
-    right: 5px;
-    top: 5px;
+    width: 230px;
+    left: -256px;
+    top: 0;
     z-index: 200;
+    font-size: 14px;
+    padding: 5px 5px 10px 25px;
+    margin: 0;
+    background-color: #fcfaf5;
+    border: 1px solid #bdb7a1;
+    border-radius: 5px;
+    text-align: left;
 }
-.right_nav_wrapper #right_nav.calendar_block table td .day_content em:hover ul.day_content_list {
+.right_nav_wrapper #right_nav.calendar_block table td .day_content:hover em ul.day_content_list {
     display: block;
 }
 .right_nav_wrapper #right_nav.calendar_block table td.noday {
