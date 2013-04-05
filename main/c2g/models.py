@@ -800,6 +800,8 @@ class UserProfile(TimestampMixin, models.Model):
     piazza_email = models.CharField(max_length=128,blank=True)
     piazza_name = models.CharField(max_length=128,blank=True)
     email_me = models.BooleanField(default=True) #get emails sent by the teaching staff
+    chat_name = models.CharField(max_length=16, blank=True)
+    chat_pass = models.CharField(max_length=16, blank=True)
     
     institutions = models.ManyToManyField(Institution) #these are confirmed institutions via shib or other trusted verifier
 

@@ -1,6 +1,4 @@
-from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from django.template import Context, loader
 from django.template import RequestContext
 from courses.actions import auth_view_wrapper
 from courses.forums.forms import PiazzaAuthForm
