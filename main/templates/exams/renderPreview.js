@@ -842,7 +842,9 @@ var c2gXMLParse = (function() {
                               break;
 
                         case 'optionresponse':
-
+                        
+                            console.log("optionresponse"); 
+                            
                             var optionData = $(node).find('optioninput');
                             var optionItemStr = $(optionData).attr('options');
                             var optionItemArr = optionItemStr.split(',');

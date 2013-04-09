@@ -135,8 +135,15 @@ c2gXMLParse.markdown2quiz = function (html_text, outer_mDOM) {
             qslug = c2gXMLParse.slugify($(list).prev().text()) + '-' + qslug;
         }
         
+        maxChoiceLength = 0; 
+        choices.each(function() {
+            var choiceText = $(this).text()
+            maxChoiceLength = Math.max(maxChoiceLength, choiceText.length); 
+        });
+        
         //Do the display HTML
-        if (choices.length <= 5) {
+        //Don't want the <select> if the text choices are incredibly long! 
+        if (choices.length <= 5 || maxChoiceLength >= 50) {
             type = $(list).is("ol")?"radio":"checkbox";
             wrapperElem = $("<fieldset></fieldset>");
             wrapperElem.attr("data-report", qslug).attr("name", qname);
