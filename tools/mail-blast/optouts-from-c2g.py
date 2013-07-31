@@ -136,7 +136,7 @@ where s.user_id = u.id"""
     sql_query = sql_query_template
     proxy = "%s@jump.prod.class.stanford.edu" % JUMPBOX_USERNAME
     command_template = """ssh %s "mysql -e \\"%s\\"" """
-    students = dict_from_database("enrolled_students", sql_query, proxy, command_template
+    students = dict_from_database("enrolled_students", sql_query, proxy, command_template)
 
     # Get Excludes list from Class2Go
     print_separator_to_stderr()
@@ -151,14 +151,16 @@ where s.user_id = u.id"""
     for k,v in students.iteritems():
         if excludes.has_key(k):
             for course_id in v:
-                insert_statements += "INSERT IGNORE INTO bulk_email_optout ('email', 'course_id') VALUES (%s, %s);" % (k, course_id)
+                insert_statements += "INSERT IGNORE INTO bulk_email_optout (email, course_id) VALUES ('%s', '%s');\n" % (k, course_id)
                 print >> sys.stderr, "Added insert statement for optout for %s from %s" % (k, course_id)
                 optouts += 1
 
-    proxy = "%s@jump.prod.class.stanford.edu" % JUMPBOX_USERNAME
-    command_template = """ssh %s "mysql -e \\"%s\\"" """
-    cmd = command_template % (proxy, insert_statements)
-    result = subprocess.check_output(cmd, shell=True) #raises CalledProcessError if error, success otherwise
+    # proxy = "%s@jump.prod.class.stanford.edu" % JUMPBOX_USERNAME
+    # command_template = """ssh %s "mysql -e \\"%s\\"" """
+    # cmd = command_template % (proxy, insert_statements)
+    # result = subprocess.check_output(cmd, shell=True) #raises CalledProcessError if error, success otherwise
+
+    print insert_statements
 
     # Summary at the end to stderr
     print_separator_to_stderr()
