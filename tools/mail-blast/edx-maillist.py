@@ -25,7 +25,7 @@ import optparse
 import re
 import unicodedata
 
-DEFAULT_COURSEID="Medicine/HRP258/Statistics_In_Medicine"
+DEFAULT_COURSEID="Education/EDUC115N/How_to_Learn_Math"
 CHECK_EMAILS_TO_SEND = 10
 JUMPBOX_USERNAME="sef"
 
@@ -136,8 +136,12 @@ def main():
 from student_courseenrollment s, auth_userprofile up, auth_user u
 where s.user_id = u.id
 and s.user_id = up.user_id
-and s.course_id = '%s'"""
-    sql_query = sql_query_template % options.courseid
+and s.user_id not in
+  (select user_id from bulk_email_optout oo where oo.course_id = '%s')
+and s.course_id = '%s'
+"""
+    # hack - interpolate courseid string twice to work around collation error
+    sql_query = sql_query_template % (options.courseid, options.courseid)
     proxy = "%s@jump.prod.class.stanford.edu" % JUMPBOX_USERNAME
     command_template = """ssh %s "mysql -e \\"%s\\"" """
     students = dict_from_database("enrolled_students", sql_query, proxy, command_template)
