@@ -982,7 +982,7 @@ def view_csv_grades(request, course_prefix, course_suffix, exam_slug):
 
     # Find the appropriate ExamRecord, for each student. In this case, appropriate
     # means the last submission prior to the grace_period.
-    exam_record_ptrs = ExamRecord.objects.values('student__username').filter(exam=exam, exam__grace_period__gt=F('time_created')).annotate(last_submission_id=Max('id'))
+    exam_record_ptrs = ExamRecord.objects.values('student__username').filter(exam=exam, complete=True, exam__grace_period__gt=F('time_created')).annotate(last_submission_id=Max('id'))
     fname = course_prefix+"-"+course_suffix+"-"+exam_slug+"-grades-"+datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")+".csv"
     outfile = open(FILE_DIR+"/"+fname,"w+")
 
